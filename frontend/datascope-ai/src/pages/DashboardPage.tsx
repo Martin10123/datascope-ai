@@ -1,176 +1,231 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { LogOut, Brain, TrendingUp, Building2, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useAuthStore } from '../store/authStore';
-import { Button } from '../components/ui';
+import { 
+  TrendingUp, 
+  Building2, 
+  ShoppingBag, 
+  Activity, 
+  Users, 
+  Globe,
+  BarChart3,
+  ArrowUpRight,
+  ArrowDownRight,
+} from 'lucide-react';
+import { MainLayout } from '../components/layout';
+import { ChartCard, LineChart, BarChart, DoughnutChart } from '../components/charts';
+import { 
+  trendingTechnologiesData,
+  sentimentAnalysisData,
+  topProductsData,
+  websiteTrafficData,
+  revenueData,
+} from '../services/chartMockData';
 
 export const DashboardPage: React.FC = () => {
-  const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
+  const stats = [
+    {
+      label: 'Total Análisis',
+      value: '12,543',
+      change: '+12.5%',
+      isPositive: true,
+      icon: BarChart3,
+      color: 'blue',
+    },
+    {
+      label: 'Tendencias Activas',
+      value: '89',
+      change: '+23.1%',
+      isPositive: true,
+      icon: TrendingUp,
+      color: 'green',
+    },
+    {
+      label: 'Fuentes Monitoreadas',
+      value: '24',
+      change: '+8.0%',
+      isPositive: true,
+      icon: Globe,
+      color: 'purple',
+    },
+    {
+      label: 'Usuarios Activos',
+      value: '1,429',
+      change: '-2.4%',
+      isPositive: false,
+      icon: Users,
+      color: 'orange',
+    },
+  ];
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
-  const modules = [
+  const quickModules = [
     {
       icon: TrendingUp,
       title: 'Tendencias Tecnológicas',
-      description: 'Análisis de GitHub, Stack Overflow y Reddit',
+      description: 'GitHub, Stack Overflow, Reddit',
       color: 'from-blue-500 to-indigo-500',
-      bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+      value: '156',
+      label: 'Tendencias',
     },
     {
       icon: Building2,
       title: 'Reputación Empresarial',
-      description: 'Análisis de sentimiento de Glassdoor y Trustpilot',
+      description: 'Glassdoor, Trustpilot',
       color: 'from-purple-500 to-pink-500',
-      bgColor: 'bg-purple-50 dark:bg-purple-900/20',
+      value: '2,341',
+      label: 'Reseñas',
     },
     {
       icon: ShoppingBag,
       title: 'Productos Virales',
-      description: 'Tendencias de Amazon, AliExpress y TikTok',
+      description: 'Amazon, AliExpress, TikTok',
       color: 'from-green-500 to-emerald-500',
-      bgColor: 'bg-green-50 dark:bg-green-900/20',
+      value: '89',
+      label: 'Productos',
     },
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="relative">
-                <div className="absolute inset-0 bg-blue-500 blur-lg opacity-30 rounded-full" />
-                <Brain className="h-10 w-10 relative text-blue-600 dark:text-blue-400" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  DataScope AI
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Dashboard de Análisis
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <div className="text-right hidden sm:block">
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  {user?.name}
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {user?.email}
-                </p>
-              </div>
-              <Button
-                variant="outline"
-                icon={LogOut}
-                onClick={handleLogout}
-              >
-                Cerrar Sesión
-              </Button>
-            </div>
-          </div>
+    <MainLayout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Dashboard
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Bienvenido al panel de análisis de DataScope AI
+          </p>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6"
+            >
+              <div className="flex items-center justify-between">
+                <div className={`p-3 rounded-lg bg-${stat.color}-100 dark:bg-${stat.color}-900/20`}>
+                  <stat.icon className={`h-6 w-6 text-${stat.color}-600 dark:text-${stat.color}-400`} />
+                </div>
+                <div className={`flex items-center text-sm font-medium ${
+                  stat.isPositive ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {stat.isPositive ? (
+                    <ArrowUpRight className="h-4 w-4 mr-1" />
+                  ) : (
+                    <ArrowDownRight className="h-4 w-4 mr-1" />
+                  )}
+                  {stat.change}
+                </div>
+              </div>
+              <div className="mt-4">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {stat.value}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  {stat.label}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Charts Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Line Chart - Tendencias Tecnológicas */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <ChartCard title="Tendencias Tecnológicas">
+              <LineChart data={trendingTechnologiesData} />
+            </ChartCard>
+          </motion.div>
+
+          {/* Doughnut Chart - Análisis de Sentimiento */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <ChartCard title="Análisis de Sentimiento">
+              <DoughnutChart data={sentimentAnalysisData} />
+            </ChartCard>
+          </motion.div>
+
+          {/* Bar Chart - Productos Más Vendidos */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <ChartCard title="Categorías de Productos">
+              <BarChart data={topProductsData} />
+            </ChartCard>
+          </motion.div>
+
+          {/* Line Chart - Tráfico Web */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <ChartCard title="Tráfico Semanal">
+              <LineChart data={websiteTrafficData} />
+            </ChartCard>
+          </motion.div>
+        </div>
+
+        {/* Full Width Chart - Revenue Comparison */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-8"
+          transition={{ delay: 0.6 }}
         >
-          {/* Welcome Section */}
-          <div className="bg-linear-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-8 text-white">
-            <h2 className="text-3xl font-bold mb-2">
-              ¡Bienvenido, {user?.name?.split(' ')[0]}! 👋
-            </h2>
-            <p className="text-blue-100">
-              Explora los módulos de análisis y descubre tendencias en tiempo real
-            </p>
-          </div>
-
-          {/* Modules Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {modules.map((module, index) => (
-              <motion.div
-                key={module.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                className={`${module.bgColor} rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer group`}
-              >
-                <div className={`inline-flex p-3 rounded-lg bg-linear-to-r ${module.color} shadow-lg mb-4`}>
-                  <module.icon className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {module.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  {module.description}
-                </p>
-                <div className="mt-4">
-                  <span className="text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:underline">
-                    Explorar módulo →
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Stats Section */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <StatCard
-              label="Total de Análisis"
-              value="1,234"
-              change="+12%"
-              isPositive
-            />
-            <StatCard
-              label="Tendencias Detectadas"
-              value="89"
-              change="+23%"
-              isPositive
-            />
-            <StatCard
-              label="Fuentes Activas"
-              value="12"
-              change="+5%"
-              isPositive
-            />
-          </div>
+          <ChartCard title="Comparación de Análisis Mensuales">
+            <BarChart data={revenueData} />
+          </ChartCard>
         </motion.div>
-      </main>
-    </div>
+
+        {/* Quick Modules */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {quickModules.map((module, index) => (
+            <motion.div
+              key={module.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 + index * 0.1 }}
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-xl transition-shadow cursor-pointer group"
+            >
+              <div className={`inline-flex p-3 rounded-lg bg-linear-to-r ${module.color} shadow-lg mb-4`}>
+                <module.icon className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                {module.title}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                {module.description}
+              </p>
+              <div className="flex items-end justify-between">
+                <div>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {module.value}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {module.label}
+                  </p>
+                </div>
+                <Activity className="h-8 w-8 text-gray-300 dark:text-gray-600" />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </MainLayout>
   );
 };
-
-interface StatCardProps {
-  label: string;
-  value: string;
-  change: string;
-  isPositive: boolean;
-}
-
-const StatCard: React.FC<StatCardProps> = ({ label, value, change, isPositive }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{label}</p>
-    <div className="flex items-baseline justify-between">
-      <h3 className="text-3xl font-bold text-gray-900 dark:text-white">{value}</h3>
-      <span className={`text-sm font-medium ${
-        isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-      }`}>
-        {change}
-      </span>
-    </div>
-  </div>
-);
