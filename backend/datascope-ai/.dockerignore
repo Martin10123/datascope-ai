@@ -4,27 +4,21 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
 venv/
+env/
 ENV/
 env.bak/
 venv.bak/
 
-# Flask
-instance/
-.webassets-cache
-
-# Environment variables
+# Environment
 .env
 .env.local
-.flaskenv
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
 
 # OS
 .DS_Store
@@ -44,10 +38,13 @@ logs/
 .coverage
 htmlcov/
 
-# Distribution
-dist/
-build/
-*.egg-info/
+# Git
+.git/
+.gitignore
 
 # Docker
-docker-compose.override.yml
+Dockerfile
+docker-compose.yml
+
+# Documentation
+README.md
