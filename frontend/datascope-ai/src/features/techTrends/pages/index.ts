@@ -1,1 +1,0 @@
-export { TechTrendsPage } from './TechTrendsPage';

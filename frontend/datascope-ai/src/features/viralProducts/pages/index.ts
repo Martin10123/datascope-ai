@@ -1,1 +1,0 @@
-export { ViralProductsPage } from './ViralProductsPage';
